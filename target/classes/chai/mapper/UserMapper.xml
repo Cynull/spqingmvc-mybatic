@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="chai.dao.Userdao">
+	
+	<resultMap type="Userbean" id="userResult">
+		<result property="id" column="id" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="userName" column="username" />
+		<result property="age" column="age" />
+	</resultMap>
+
+	<select id="selectAll" resultMap="userResult">
+		select * from t_user
+ 	</select>
+
+	<select id="selectbyid" parameterType="String" resultMap="userResult">
+		select *
+		from t_user where id=#{id}
+ 	</select>
+
+	<insert id="insert" parameterType="Userbean">
+	 <selectKey keyProperty="id" resultType="String" order="BEFORE">  
+        SELECT  UUID()   FROM DUAL
+    </selectKey>  
+	 <![CDATA[
+		insert into
+		t_user(id,username,age) values(#{id,jdbcType=VARCHAR},#{userName},#{age})
+		]]>
+ 	</insert>
+
+	<update id="update" parameterType="Userbean">
+		update t_user set
+		username=#{userName},age=#{age} where id=#{id}
+ 	</update>
+ 	
+	<delete id="delete" parameterType="String">
+		delete from t_user where
+		id=#{id}
+	</delete>
+
+</mapper>
